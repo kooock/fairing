@@ -2,6 +2,7 @@ import logging
 from kubernetes import client
 from kubernetes.client.models.v1_resource_requirements import V1ResourceRequirements
 from kubeflow.fairing.constants import constants
+from enum import Enum
 
 logger = logging.getLogger(__name__)
 
@@ -113,3 +114,28 @@ def add_env(env_vars):
             else:
                 pod_spec.containers[0].env = env_list
     return _add_env
+
+
+#In, NotIn, Exists, DoesNotExist. Gt, and Lt
+class MatchOperator(Enum):
+    MATCH_OPERATOR_IN = 'In'
+    MATCH_OPERATOR_NOT_IN = 'NotIn'
+    MATCH_OPERATOR_EXISTS = 'Exists'
+    MATCH_OPERATOR_DOES_NOT_EXIST = 'DoesNotExist'
+    MATCH_OPERATOR_GT = 'Gt'
+    MATCH_OPERATOR_LT = 'Lt'
+
+def get_label_express(key,operator,values):
+
+    def _get_label_express(label_selector_spec):
+        label_selector_spec.match_expressions.append(
+            client.V1LabelSelectorRequirement(key=key,operator=operator,values=values)
+        )
+    return _get_label_express
+
+def get_label_match(key,value):
+
+    def _get_label_match(label_selector_spec):
+        label_selector_spec.match_labels[key] = value
+
+    return _get_label_match
