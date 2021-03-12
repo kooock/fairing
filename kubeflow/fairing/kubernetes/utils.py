@@ -7,7 +7,7 @@ from enum import Enum
 logger = logging.getLogger(__name__)
 
 #Exists and Equal
-class TolerationOperator(Enum):
+class TolerationOperator():
     EXISTS = 'Exists'
     EQUAL = 'Equal'
 
@@ -140,7 +140,7 @@ def add_env(env_vars):
 
 
 #In, NotIn, Exists, DoesNotExist. Gt, and Lt
-class LabelOperator(Enum):
+class LabelOperator():
     IN = 'In'
     NOT_IN = 'NotIn'
     EXISTS = 'Exists'
