@@ -31,7 +31,7 @@ def get_toleration_mutator(effect=None, key=None, operator=None, toleration_seco
 def get_node_selector(key,value):
 
     def _node_selector(kube_manager, pod_spec, namespace):
-        if key is None or key is None:
+        if key is None or value is None:
             return
 
         if pod_spec.node_selector is None:
