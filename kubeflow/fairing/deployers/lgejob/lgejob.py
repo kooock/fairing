@@ -138,7 +138,7 @@ class LGEJob(DeployerInterface): #pylint:disable=too-many-instance-attributes
             spec=pod_spec)
 
     def generate_label_selector_spec(self):
-        return k8s_client.V1JobSpec.V1LabelSelector(match_expressions=[],match_labels={})
+        return k8s_client.V1LabelSelector()
 
     def generate_deployment_spec(self, label_selector_spec, pod_template_spec):
         """Generate a V1Job initialized with correct completion and

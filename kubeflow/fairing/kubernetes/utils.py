@@ -6,6 +6,29 @@ from enum import Enum
 
 logger = logging.getLogger(__name__)
 
+#Exists and Equal
+class TolerationOperator(Enum):
+    EXISTS = 'Exists'
+    EQUAL = 'Equal'
+
+def get_toleration_mutator(effect=None, key=None, operator=None, toleration_seconds=None, value=None):
+
+    def _toleration_mutator(kube_manager, pod_spec, namespace):
+        if effect is None and key is None and operator is None and toleration_seconds is None and value is None:
+            return
+
+        if pod_spec.tolerations is None:
+            pod_spec.tolerations = []
+
+        pod_spec.tolerations.append(client.V1Toleration(effect=effect,
+                                                        key=key,
+                                                        operator=operator,
+                                                        toleration_seconds=toleration_seconds,
+                                                        value=value))
+
+    return _toleration_mutator
+
+
 def get_resource_mutator(cpu=None, memory=None, gpu=None, gpu_vendor='nvidia'):
     """The mutator for getting the resource setting for pod spec.
 
@@ -117,25 +140,31 @@ def add_env(env_vars):
 
 
 #In, NotIn, Exists, DoesNotExist. Gt, and Lt
-class MatchOperator(Enum):
-    MATCH_OPERATOR_IN = 'In'
-    MATCH_OPERATOR_NOT_IN = 'NotIn'
-    MATCH_OPERATOR_EXISTS = 'Exists'
-    MATCH_OPERATOR_DOES_NOT_EXIST = 'DoesNotExist'
-    MATCH_OPERATOR_GT = 'Gt'
-    MATCH_OPERATOR_LT = 'Lt'
+class LabelOperator(Enum):
+    IN = 'In'
+    NOT_IN = 'NotIn'
+    EXISTS = 'Exists'
+    DOES_NOT_EXIST = 'DoesNotExist'
+    GT = 'Gt'
+    LT = 'Lt'
 
 def get_label_express(key,operator,values):
 
-    def _get_label_express(label_selector_spec):
+    def _label_express(label_selector_spec):
+        if label_selector_spec.match_expressions is None:
+            label_selector_spec.match_expressions = []
+
         label_selector_spec.match_expressions.append(
             client.V1LabelSelectorRequirement(key=key,operator=operator,values=values)
         )
-    return _get_label_express
+    return _label_express
 
 def get_label_match(key,value):
 
-    def _get_label_match(label_selector_spec):
+    def _label_match(label_selector_spec):
+        if label_selector_spec.match_labels is None:
+            label_selector_spec.match_labels = {}
+            
         label_selector_spec.match_labels[key] = value
 
-    return _get_label_match
+    return _label_match
