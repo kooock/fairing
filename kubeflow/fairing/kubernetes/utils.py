@@ -28,6 +28,19 @@ def get_toleration_mutator(effect=None, key=None, operator=None, toleration_seco
 
     return _toleration_mutator
 
+def get_node_selector(key,value):
+
+    def _node_selector(kube_manager, pod_spec, namespace):
+        if key is None or key is None:
+            return
+
+        if pod_spec.node_selector is None:
+            pod_spec.node_selector = {}
+
+        pod_spec.node_selector[key] = value
+
+    return _node_selector
+
 
 def get_resource_mutator(cpu=None, memory=None, gpu=None, gpu_vendor='nvidia'):
     """The mutator for getting the resource setting for pod spec.
@@ -164,7 +177,7 @@ def get_label_match(key,value):
     def _label_match(label_selector_spec):
         if label_selector_spec.match_labels is None:
             label_selector_spec.match_labels = {}
-            
+
         label_selector_spec.match_labels[key] = value
 
     return _label_match
