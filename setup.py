@@ -11,7 +11,7 @@ setuptools.setup(
     license="Apache License Version 2.0",
     description="Kubeflow Fairing Python SDK.",
     long_description="Python SDK for Kubeflow Fairing components.",
-    url="https://github.com/kubeflow/fairing",
+    url="https://github.com/kooock/fairing",
     packages=setuptools.find_packages(
         include=("kubeflow*", "containerregistry*",)),
     package_data={'': ['requirements.txt']},
